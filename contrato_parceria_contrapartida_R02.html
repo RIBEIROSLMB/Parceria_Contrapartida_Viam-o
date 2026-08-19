@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato de Parceria (R02) - Preenchimento Interativo & PDF</title>
+    
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 15mm;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.6;
+            color: #1e293b;
+            background-color: #e2e8f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .toolbar {
+            max-width: 800px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .toolbar-info {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: #475569;
+            font-weight: 500;
+        }
+        .btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 5px rgba(37, 99, 235, 0.2);
+            transition: background 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        .btn-secondary {
+            background: #64748b;
+        }
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .contract-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 45px 55px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 13pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 10px;
+            color: #0f172a;
+        }
+
+        h2 {
+            font-size: 10.5pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 18px;
+            margin-bottom: 6px;
+            color: #0f172a;
+        }
+
+        p {
+            text-align: justify;
+            margin-bottom: 12px;
+            text-indent: 25px;
+        }
+
+        .no-indent {
+            text-indent: 0;
+        }
+
+        /* Estilo dos Campos Editáveis na Tela */
+        input.edit-field {
+            font-family: 'Inter', sans-serif;
+            font-size: 10.5pt;
+            color: #1e3a8a;
+            font-weight: 600;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 4px;
+            padding: 2px 6px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input.edit-field:focus {
+            background-color: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        input.inline-w-xs { width: 45px; text-align: center; }
+        input.inline-w-sm { width: 90px; text-align: center; }
+        input.inline-w-md { width: 160px; }
+        input.inline-w-lg { width: 260px; }
+        input.inline-w-xl { width: 380px; }
+        input.inline-w-full { width: 98%; }
+
+        .signatures {
+            margin-top: 50px;
+            page-break-inside: avoid;
+        }
+
+        .sig-block {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .sig-box {
+            width: 45%;
+            text-align: center;
+        }
+
+        .sig-line {
+            border-top: 1px solid #000;
+            margin-bottom: 8px;
+        }
+
+        /* CONFIGURAÇÃO PARA IMPRESSÃO E GERAÇÃO DE PDF */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+                color: #000;
+            }
+            .toolbar, .no-print {
+                display: none !important;
+            }
+            .contract-container {
+                box-shadow: none;
+                padding: 0;
+                width: 100%;
+                max-width: none;
+                border-radius: 0;
+            }
+            input.edit-field {
+                border: none !important;
+                background: transparent !important;
+                color: #000000 !important;
+                padding: 0 !important;
+                font-family: inherit !important;
+                font-size: inherit !important;
+                font-weight: normal !important;
+                box-shadow: none !important;
+                appearance: none;
+                -webkit-appearance: none;
+            }
+            input.edit-field::placeholder {
+                color: transparent !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BARRA DE FERRAMENTAS SUPERIOR -->
+    <div class="toolbar no-print">
+        <div class="toolbar-info">
+            ✏️ <strong>Contrato R02 (Fonte Inter):</strong> Clique nos campos em azul para preencher diretamente na tela.
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" onclick="limparCampos()">🧹 Limpar Campos</button>
+            <button class="btn" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
+        </div>
+    </div>
+
+    <!-- CORPO DO CONTRATO -->
+    <div class="contract-container">
+        <h1>CONTRATO DE PRESTAÇÃO DE SERVIÇOS TÉCNICOS DE AVALIAÇÃO IMOBILIÁRIA E PARCERIA A ÊXITO (SUCCESS FEE)</h1>
+
+        <p class="no-indent">Pelo presente instrumento particular de prestação de serviços de avaliação imobiliária e consultoria técnica, de um lado:</p>
+
+        <p class="no-indent">
+            <strong>CONTRATANTE:</strong> 
+            <input type="text" class="edit-field inline-w-xl" placeholder="Nome da Empresa / Razão Social" id="c_empresa">, 
+            pessoa jurídica de direito privado, inscrita no CNPJ/MF sob o nº 
+            <input type="text" class="edit-field inline-w-md" placeholder="00.000.000/0001-00" id="c_cnpj">, 
+            com sede na 
+            <input type="text" class="edit-field inline-w-xl" placeholder="Endereço Completo da Empresa" id="c_endereco">, 
+            Cidade de <input type="text" class="edit-field inline-w-md" value="Viamão" id="c_cidade"> - <input type="text" class="edit-field inline-w-xs" value="RS" id="c_uf">, 
+            neste ato representada por seu sócio/administrador Sr.(a) 
+            <input type="text" class="edit-field inline-w-lg" placeholder="Nome do Representante Legal" id="c_rep_nome">, 
+            portador(a) do CPF nº <input type="text" class="edit-field inline-w-md" placeholder="000.000.000-00" id="c_rep_cpf"> 
+            e RG nº <input type="text" class="edit-field inline-w-sm" placeholder="0000000000" id="c_rep_rg">;
+        </p>
+
+        <p class="no-indent">E, de outro lado:</p>
+
+        <p class="no-indent">
+            <strong>CONTRATADO:</strong> 
+            <input type="text" class="edit-field inline-w-xl" placeholder="Seu Nome Completo" id="p_nome">, 
+            profissional autônomo, Perito Avaliador Imobiliário Habilitado, inscrito no CPF/MF sob o nº 
+            <input type="text" class="edit-field inline-w-md" placeholder="Seu CPF" id="p_cpf">, 
+            RG nº <input type="text" class="edit-field inline-w-sm" placeholder="Seu RG" id="p_rg">, 
+            Registro Profissional (CREA/CAU/CNAI) nº 
+            <input type="text" class="edit-field inline-w-md" placeholder="Nº de Registro Profissional" id="p_registro">, 
+            residente e domiciliado na 
+            <input type="text" class="edit-field inline-w-xl" placeholder="Seu Endereço Completo" id="p_endereco">, 
+            Cidade de <input type="text" class="edit-field inline-w-md" value="Viamão" id="p_cidade"> - <input type="text" class="edit-field inline-w-xs" value="RS" id="p_uf">;
+        </p>
+
+        <p class="no-indent">Têm entre si, justo e contratado, o presente Contrato de Prestação de Serviços Técnicos de Avaliação Imobiliária e Reavaliação de Contrapartida Urbanística, regido pelas seguintes cláusulas:</p>
+
+        <h2>CLÁUSULA PRIMEIRA – DO OBJETO</h2>
+        <p>1.1. Constitui objeto deste contrato a elaboração de Laudo Técnico de Avaliação Imobiliária (conforme ABNT NBR 14.653) e a fundamentação técnica para Reavaliação do Valor Venal da Gleba e Redução do Valor de Contrapartida Urbanística (Outorga Onerosa, Doação em Pecúnia ou Investimentos do Entorno) apurados pelo Município de Viamão/RS para o empreendimento denominado <input type="text" class="edit-field inline-w-lg" placeholder="Nome do Empreendimento" id="emp_nome">, localizado na <input type="text" class="edit-field inline-w-xl" placeholder="Localização/Endereço do Imóvel" id="emp_local">, Matrícula nº <input type="text" class="edit-field inline-w-sm" placeholder="Nº Matrícula" id="emp_mat"> do Registro de Imóveis de Viamão/RS.</p>
+
+        <h2>CLÁUSULA SEGUNDA – DA CONDIÇÃO DE RISCO ZERO E HONORÁRIOS A ÊXITO</h2>
+        <p>2.1. O presente contrato é firmado sob a condição estrita de <strong>ÊXITO INTEGRAL (100% RISCO ZERO PARA A CONTRATANTE)</strong>. A CONTRATANTE não efetuará qualquer pagamento inicial, adiantamento ou cobertura de custos operacionais ao CONTRATADO.</p>
+        <p>2.2. A remuneração do CONTRATADO corresponderá ao percentual de <strong>10% (dez por cento)</strong> incidente estritamente sobre a <strong>ECONOMIA EFETIVAMENTE OBTIDA</strong> no valor final da contrapartida financeira após aprovação e homologação pela Prefeitura Municipal de Viamão.</p>
+        <p>2.3. A economia obtida será apurada mediante a diferença simples:</p>
+        <p class="no-indent" style="text-align: center; font-weight: bold; background: #f0f4f8; border: 1px dashed #004a99; padding: 10px; margin: 10px 0;">
+            ECONOMIA OBTIDA = (Valor Inicial da Contrapartida) – (Valor Final Recalculado e Aprovado pela Prefeitura)
+        </p>
+        <p>2.4. Caso o requerimento de revisão seja indeferido pelo Município de Viamão, ou caso não ocorra qualquer redução no valor da contrapartida, <strong>NENHUM HONORÁRIO SERÁ DEVIDO AO CONTRATADO</strong>, encerrando-se o contrato sem qualquer ônus para a CONTRATANTE.</p>
+
+        <h2>CLÁUSULA TERCEIRA – DA FORMA DE PAGAMENTO E QUITAÇÃO</h2>
+        <p>3.1. Os honorários de 10% (dez por cento) sobre a economia obtida tornar-se-ão exigíveis no prazo de até <input type="text" class="edit-field inline-w-xs" value="5" id="pag_prazo"> (<input type="text" class="edit-field inline-w-sm" value="cinco" id="pag_prazo_extenso">) dias úteis contados da notificação/emissão formal da certidão com a nova contrapartida reduzida expedida pela Prefeitura de Viamão.</p>
+        <p>3.2. O pagamento será efetuado mediante depósito, transferência bancária ou PIX na conta de titularidade do CONTRATADO (Pessoa Física):</p>
+        <p class="no-indent" style="margin-left: 25px;">
+            <strong>Banco:</strong> <input type="text" class="edit-field inline-w-md" placeholder="Seu Banco" id="banco_nome"> | 
+            <strong>Agência:</strong> <input type="text" class="edit-field inline-w-sm" placeholder="Agência" id="banco_ag"> | 
+            <strong>Conta:</strong> <input type="text" class="edit-field inline-w-md" placeholder="Número da Conta" id="banco_cc"><br>
+            <strong>Chave PIX (CPF/Celular/E-mail):</strong> <input type="text" class="edit-field inline-w-lg" placeholder="Sua Chave PIX" id="banco_pix">
+        </p>
+
+        <h2>CLÁUSULA QUARTA – DAS OBRIGAÇÕES DAS PARTES E INDEPENDÊNCIA TÉCNICA</h2>
+        <p>4.1. <strong>Do CONTRATADO:</strong> Elaborar o Laudo de Avaliação em conformidade com as normas técnicas da ABNT NBR 14.653 e a legislação urbanística municipal de Viamão, prestando assistência técnica nos autos do requerimento administrativo.</p>
+        <p>4.2. <strong>Da CONTRATANTE:</strong> Fornecer a documentação do imóvel (matrícula atualizada, projetos e diretrizes), outorgar procuração para representação técnica no processo administrativo e efetuar o pagamento dos honorários no valor e prazo estipulados.</p>
+        <p>4.3. As partes declaram que o CONTRATADO atua na condição de Perito Avaliador Autônomo independente, sem qualquer vínculo empregatício ou de subordinação.</p>
+
+        <h2>CLÁUSULA QUINTA – DO FORO</h2>
+        <p>5.1. Para dirimir quaisquer questões decorrentes deste contrato, elegem o Foro da Comarca de Viamão/RS.</p>
+
+        <p class="no-indent" style="margin-top: 25px;">E, por estarem assim ajustadas, assinam este contrato em 02 (duas) vias de igual teor.</p>
+
+        <p class="no-indent" style="margin-top: 20px; text-align: right;">
+            Viamão/RS, <input type="text" class="edit-field inline-w-xs" placeholder="Dia" id="data_dia"> de <input type="text" class="edit-field inline-w-md" placeholder="Mês" id="data_mes"> de 20<input type="text" class="edit-field inline-w-xs" value="26" id="data_ano">.
+        </p>
+
+        <div class="signatures">
+            <div class="sig-block">
+                <div class="sig-box">
+                    <div class="sig-line"></div>
+                    <strong>CONTRATANTE</strong><br>
+                    <input type="text" class="edit-field inline-w-full" placeholder="Assinatura / Nome Empresa" id="sig_empresa"><br>
+                    CNPJ: <input type="text" class="edit-field inline-w-md" placeholder="00.000.000/0001-00" id="sig_cnpj">
+                </div>
+                <div class="sig-box">
+                    <div class="sig-line"></div>
+                    <strong>CONTRATADO (Perito Avaliador)</strong><br>
+                    <input type="text" class="edit-field inline-w-full" placeholder="Seu Nome Completo" id="sig_perito"><br>
+                    CPF: <input type="text" class="edit-field inline-w-md" placeholder="Seu CPF" id="sig_cpf"><br>
+                    Reg. Profissional: <input type="text" class="edit-field inline-w-sm" placeholder="Nº Registro" id="sig_reg">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE SINCRONIZAÇÃO E NAVEGAÇÃO -->
+    <script>
+        // Sincronizar nome da empresa, representante e perito nas assinaturas automaticamente
+        document.getElementById('c_empresa').addEventListener('input', function() {
+            document.getElementById('sig_empresa').value = this.value;
+        });
+        document.getElementById('c_cnpj').addEventListener('input', function() {
+            document.getElementById('sig_cnpj').value = this.value;
+        });
+        document.getElementById('p_nome').addEventListener('input', function() {
+            document.getElementById('sig_perito').value = this.value;
+        });
+        document.getElementById('p_cpf').addEventListener('input', function() {
+            document.getElementById('sig_cpf').value = this.value;
+        });
+        document.getElementById('p_registro').addEventListener('input', function() {
+            document.getElementById('sig_reg').value = this.value;
+        });
+
+        // Limpar todos os campos
+        function limparCampos() {
+            if (confirm("Deseja limpar todos os campos preenchidos do contrato?")) {
+                const inputs = document.querySelectorAll('input.edit-field');
+                inputs.forEach(input => {
+                    if (input.id !== 'c_cidade' && input.id !== 'c_uf' && input.id !== 'p_cidade' && input.id !== 'p_uf' && input.id !== 'pag_prazo' && input.id !== 'pag_prazo_extenso' && input.id !== 'data_ano') {
+                        input.value = '';
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otimização de Contrapartidas Urbanísticas & Avaliação de Glebas em Viamão/RS</title>
+
+    <!-- Google Fonts & Lucide Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #0f172a;
+            --primary-accent: #1e3a8a;
+            --brand-blue: #2563eb;
+            --brand-light: #eff6ff;
+            --success: #059669;
+            --success-bg: #ecfdf5;
+            --dark-text: #1e293b;
+            --light-text: #64748b;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark-text);
+            background-color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header.hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 50px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header.hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .hero h1 {
+            font-size: 2.1rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            max-width: 780px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--brand-light);
+            color: var(--brand-blue);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .card p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 50px 0 30px;
+        }
+
+        .section-title h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .section-title p {
+            color: var(--light-text);
+            font-size: 1rem;
+            margin-top: 6px;
+        }
+
+        /* Simulation Box & Real-Time Inputs */
+        .simulation-box {
+            background: white;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            margin-bottom: 40px;
+        }
+
+        .simulation-header {
+            background: #f1f5f9;
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .simulation-header h3 {
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reset-btn {
+            background: #cbd5e1;
+            color: #1e293b;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: #94a3b8;
+            color: white;
+        }
+
+        table.sim-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table.sim-table th, table.sim-table td {
+            padding: 14px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table.sim-table th {
+            background: #fafafa;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--light-text);
+            font-weight: 600;
+        }
+
+        table.sim-table td {
+            font-size: 0.95rem;
+        }
+
+        /* Estilo dos Inputs Editáveis da Tabela */
+        input.sim-input {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.93rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            padding: 4px 8px;
+            width: 165px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input.sim-input:focus {
+            background-color: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Input Especial Destacado (Amarelo/Dourado padronizado para itens revisáveis) */
+        input.sim-input-terreno {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #92400e;
+            background-color: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 6px;
+            padding: 5px 10px;
+            width: 175px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input.sim-input-terreno:focus {
+            background-color: #ffffff;
+            border-color: #d97706;
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2);
+        }
+
+        /* Linha do Ganho Bruto em Verde Original */
+        .highlight-row {
+            background: var(--success-bg) !important;
+            font-weight: 700;
+        }
+
+        .highlight-row td {
+            color: var(--success) !important;
+        }
+
+        /* Bloco Separado de Destaque da Economia Líquida em Branco */
+        .economy-highlight-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: #ffffff;
+            padding: 24px 28px;
+            margin: 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 15px rgba(30, 58, 138, 0.25);
+        }
+
+        .economy-highlight-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .economy-highlight-content {
+            text-align: right;
+            color: #ffffff;
+        }
+
+        .economy-val-large {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .economy-val-subtext {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 4px;
+        }
+
+        /* Nota Técnica Adicional */
+        .tech-note-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 20px 0 20px;
+            font-size: 0.9rem;
+            color: #475569;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        /* Feature Pillars */
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .pillar-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .pillar-card i {
+            font-size: 2rem;
+            color: var(--brand-blue);
+            margin-bottom: 12px;
+        }
+
+        .pillar-card h4 {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .pillar-card p {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        /* Call to Action Box */
+        .cta-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.2);
+        }
+
+        .cta-box h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .cta-box p {
+            font-size: 1.05rem;
+            color: #cbd5e1;
+            margin-bottom: 24px;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #ffffff;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .contact-item:hover {
+            background: rgba(255,255,255,0.22);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .pillars {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+            .economy-highlight-box {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            .economy-highlight-content {
+                text-align: center;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            .card, .simulation-box, .cta-box, .economy-highlight-box {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+            }
+            input.sim-input, input.sim-input-terreno {
+                border: none !important;
+                background: transparent !important;
+                color: inherit !important;
+                padding: 0 !important;
+                font-size: inherit !important;
+                font-weight: inherit !important;
+                box-shadow: none !important;
+                width: auto !important;
+            }
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn no-print" onclick="window.print()">
+        <i data-lucide="printer"></i> Imprimir / Salvar em PDF
+    </button>
+
+    <div class="container">
+
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="badge">
+                <i data-lucide="award"></i> Perito Avaliador Imobiliário Habilitado
+            </div>
+            <h1>Otimização de Contrapartidas Urbanísticas & Avaliação de Glebas em Viamão/RS</h1>
+            <p>Serviço técnico especializado para a <strong>REDUÇÃO DA CONTRAPARTIDA</strong> legal e reavaliação dos valores apurados no <strong>CÁLCULO DE CONTRAPARTIDA</strong> (Outorga Onerosa, Doação Financeira em Pecúnia e Investimentos de Entorno). <strong>100% focado no êxito e sem custo inicial.</strong></p>
+        </header>
+
+        <!-- Main Cards -->
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-icon">
+                    <i data-lucide="trending-down"></i>
+                </div>
+                <h3>O Problema de Avaliação Municipal</h3>
+                <p>Na aprovação de empreendimentos (condomínios, loteamentos e prédios) em Viamão/RS, a contrapartida exigida pelo Escritório de Licenciamento / SGG utiliza tabelas genéricas do valor venal/m² (Lei nº 4.188/2013 e Código Tributário).</p>
+                <p style="margin-top: 10px;">Essas tabelas genéricas frequentemente não consideram restrições ambientais, topografia, solo ou o real valor amostrado de mercado da gleba bruta, resultando em cobranças excessivas de contrapartida.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i data-lucide="check-circle-2"></i>
+                </div>
+                <h3>A Solução Técnica Especializada</h3>
+                <p>Como Perito Avaliador Imobiliário Habilitado, elaboro o Laudo Técnico de Avaliação rigorosamente enquadrado na <strong>Norma ABNT NBR 14.653</strong> e fundamentado nas Leis Urbanísticas de Viamão (inclusive a Lei nº 5.468/2025).</p>
+                <p style="margin-top: 10px;">Comprovamos administrativamente o valor real do imóvel e a oportunidade de revisão técnica dos demais itens de <strong>CONSTRUÇÃO DAS EDIFICAÇÕES E INFRAESTRUTURA</strong>, garantindo a efetiva <strong>REDUÇÃO DA CONTRAPARTIDA</strong> a ser paga pela sua empresa.</p>
+            </div>
+        </div>
+
+        <!-- 3 Pillars Section -->
+        <div class="section-title">
+            <h2>Vantagens da Parceria para Sua Empresa</h2>
+            <p>Trabalho técnico com risco zero e total alinhamento de resultados.</p>
+        </div>
+
+        <div class="pillars">
+            <div class="pillar-card">
+                <i data-lucide="shield-check" style="color: #2563eb; display: block; margin: 0 auto 12px;"></i>
+                <h4>Risco Zero (Pro Êxito)</h4>
+                <p>Sua empresa não paga nada adiantado. Se a Prefeitura não deferir a redução do valor, não há qualquer custo.</p>
+            </div>
+            <div class="pillar-card">
+                <i data-lucide="percent" style="color: #059669; display: block; margin: 0 auto 12px;"></i>
+                <h4>Honorários de 10%</h4>
+                <p>Minha remuneração é de 10% cobrados estritamente sobre o valor financeiro efetivamente economizado.</p>
+            </div>
+            <div class="pillar-card">
+                <i data-lucide="file-check" style="color: #7c3aed; display: block; margin: 0 auto 12px;"></i>
+                <h4>Laudo Pericial ABNT</h4>
+                <p>Laudo de avaliação com fundamentação técnica incontestável perante os órgãos de fiscalização da Prefeitura.</p>
+            </div>
+        </div>
+
+        <!-- Simulation Box (Simulação Interativa com Cores Originais do Portfólio) -->
+        <div class="simulation-box">
+            <div class="simulation-header">
+                <h3>Simulação Prática de Economia Financeira <span style="font-size: 0.78rem; font-weight: 500; color: #64748b; font-style: normal;">(exemplo hipotético)</span></h3>
+                <button class="reset-btn no-print" onclick="resetarSimulacao()">
+                    <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Resetar Simulação
+                </button>
+            </div>
+            <table class="sim-table">
+                <thead>
+                    <tr>
+                        <th>Tópicos Macros do Custo do Empreendimento</th>
+                        <th>Cálculo Original<br><span style="font-size: 0.8rem; font-weight: 500; text-transform: none; color: #64748b;">(Prefeitura)</span></th>
+                        <th>Cálculo Técnico<br><span style="font-size: 0.8rem; font-weight: 500; text-transform: none; color: #64748b;">(Perito Avaliador)</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #fffbeb;">
+                        <td><strong>1. Construção das Edificações</strong> <span style="font-size: 0.78rem; color: #b45309; font-weight: 700;">[revisável]</span></td>
+                        <td><input type="text" class="sim-input" value="25.399.555,37" id="c1_orig" oninput="onPrefeituraInput(1)"></td>
+                        <td><input type="text" class="sim-input-terreno" value="25.399.555,37" id="c1_per" oninput="onPeritoInput(1)"></td>
+                    </tr>
+                    <tr style="background: #fffbeb;">
+                        <td><strong>2. Terreno</strong> <span style="font-size: 0.78rem; color: #b45309; font-weight: 700;">[revisável]</span></td>
+                        <td><input type="text" class="sim-input" value="6.532.500,00" id="c2_orig" oninput="onPrefeituraInput(2)"></td>
+                        <td>
+                            <input type="text" class="sim-input-terreno" value="5.000.000,00" id="c2_per" oninput="onPeritoInput(2)">
+                        </td>
+                    </tr>
+                    <tr style="background: #fffbeb;">
+                        <td><strong>3. Infraestrutura</strong> <span style="font-size: 0.78rem; color: #b45309; font-weight: 700;">[revisável]</span></td>
+                        <td><input type="text" class="sim-input" value="982.947,48" id="c3_orig" oninput="onPrefeituraInput(3)"></td>
+                        <td><input type="text" class="sim-input-terreno" value="982.947,48" id="c3_per" oninput="onPeritoInput(3)"></td>
+                    </tr>
+                    <tr>
+                        <td>4. Comercialização dos Imóveis</td>
+                        <td><input type="text" class="sim-input" value="5.472.000,00" id="c4_orig" oninput="onPrefeituraInput(4)"></td>
+                        <td><input type="text" class="sim-input" value="5.472.000,00" id="c4_per" oninput="onPeritoInput(4)"></td>
+                    </tr>
+                    <tr>
+                        <td>5. Honorários de Projetos e Execução</td>
+                        <td><input type="text" class="sim-input" value="412.107,89" id="c5_orig" oninput="onPrefeituraInput(5)"></td>
+                        <td><input type="text" class="sim-input" value="412.107,89" id="c5_per" oninput="onPeritoInput(5)"></td>
+                    </tr>
+                    <tr style="background: #f1f5f9; font-weight: 700; border-top: 2px solid #e2e8f0;">
+                        <td><strong>CUSTO TOTAL DO EMPREENDIMENTO</strong></td>
+                        <td><strong id="tot_orig">R$ 38.799.110,74</strong></td>
+                        <td><strong id="tot_per">R$ 37.266.610,74</strong></td>
+                    </tr>
+                    <tr style="background: #f8fafc; font-weight: 800;">
+                        <td><strong>VALOR DA CONTRAPARTIDA (1,00%)</strong></td>
+                        <td style="color: #dc2626;"><strong id="contra_orig">R$ 387.991,11</strong></td>
+                        <td style="color: #047857;"><strong id="contra_per">R$ 372.666,11</strong></td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td><strong>ECONOMIA DIRETA GERADA</strong></td>
+                        <td colspan="2" style="font-size: 1.08rem; text-align: center; color: #059669;">
+                            <strong id="ganho_bruto" style="color: #059669; font-size: 1.08rem;">R$ 15.325,00 de Economia</strong>
+                        </td>
+                    </tr>
+                    <tr style="background: #ffffff; font-weight: 600; color: #1e293b; border-bottom: none;">
+                        <td style="border-bottom: none;"><strong>Honorários do Perito (10% do Êxito)</strong></td>
+                        <td colspan="2" style="text-align: center; color: #1e293b; font-style: normal; border-bottom: none;">
+                            <strong id="honorarios_perito" style="color: #1e293b; font-weight: 700;">R$ 1.532,50</strong> <span style="color: #1e293b; font-style: normal;">(Pagos somente após a aprovação da Prefeitura)</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Nota Técnica sobre Revisão de Construções e Infraestrutura -->
+            <div class="tech-note-box">
+                <i data-lucide="info" style="color: #2563eb; width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;"></i>
+                <div>
+                    <strong>Revisão Completa do Empreendimento:</strong> Além da reavaliação do Terreno, o laudo pericial também poderá analisar e auditar tecnicamente os itens de <strong>CONSTRUÇÃO DAS EDIFICAÇÕES E INFRAESTRUTURA</strong> (como enquadramento de CUB, área computável e planilhas de infraestrutura), ampliando ainda mais o potencial de <strong>REDUÇÃO DA CONTRAPARTIDA</strong>.
+                </div>
+            </div>
+
+            <!-- Bloco Separado em Destaque Especial da Economia Líquida em Branco -->
+            <div class="economy-highlight-box">
+                <div class="economy-highlight-title">
+                    <span>ECONOMIA LÍQUIDA PARA A EMPRESA</span>
+                </div>
+                <div class="economy-highlight-content">
+                    <div class="economy-val-large" id="econ_valor">R$ 13.792,50</div>
+                    <div class="economy-val-subtext">Preservados no Seu Caixa</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workflow Section -->
+        <div class="card" style="margin-bottom: 40px;">
+            <h3>Passo a Passo Simples do Atendimento</h3>
+            <ol style="padding-left: 20px; color: var(--light-text); margin-top: 10px; font-size: 0.95rem;">
+                <li style="margin-bottom: 8px;"><strong>Análise Prévia Gratuita:</strong> Envie a memória de cálculo fornecida pela Prefeitura e os dados da matrícula do imóvel.</li>
+                <li style="margin-bottom: 8px;"><strong>Assinatura do Contrato a Êxito:</strong> Assinamos o contrato simples de prestação de serviço garantindo risco zero (10% sobre a REDUÇÃO DA CONTRAPARTIDA).</li>
+                <li style="margin-bottom: 8px;"><strong>Vistoria & Laudo de Avaliação:</strong> Elaboração do laudo técnico pericial de acordo com a ABNT NBR 14.653.</li>
+                <li style="margin-bottom: 8px;"><strong>Protocolo & Deferimento:</strong> Entrada no requerimento de reavaliação perante o órgão municipal competente em Viamão.</li>
+                <li style="margin-bottom: 8px;"><strong>Pagamento dos Honorários:</strong> Emitida a certidão com o valor reduzido aprovado, efetua-se o pagamento dos 10% da economia obtida.</li>
+            </ol>
+        </div>
+
+        <!-- Call to Action / Contact -->
+        <div class="cta-box">
+            <h3>Coloco-me à Disposição para Avaliar o Seu Empreendimento</h3>
+            <p>Faça um diagnóstico sem custo e verifique o potencial de REDUÇÃO DA CONTRAPARTIDA do seu investimento em Viamão.</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i data-lucide="user-check"></i>
+                    <span><strong>Perito Avaliador:</strong> Guilherme Augusto Ribeiro</span>
+                </div>
+                <div class="contact-item">
+                    <i data-lucide="badge-check"></i>
+                    <span><strong>Registro Profissional:</strong> CREA 22157/DF</span>
+                </div>
+                <!-- Link Direcionador do WhatsApp -->
+                <a href="https://wa.link/v9ram8" target="_blank" class="contact-item" title="Clique para abrir no WhatsApp">
+                    <i data-lucide="phone"></i>
+                    <span><strong>Telefone/WhatsApp:</strong> (61) 98103-6619</span>
+                </a>
+                <!-- Link Direcionador do Gmail com Destinatário Pré-Preenchido -->
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ribeiroslmb@gmail.com" target="_blank" class="contact-item" title="Clique para escrever e-mail direto no Gmail">
+                    <i data-lucide="mail"></i>
+                    <span><strong>E-mail:</strong> ribeiroslmb@gmail.com</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT DE CÁLCULO INTEGRADO E SINCRONIZAÇÃO INTELIGENTE -->
+    <script>
+        lucide.createIcons();
+
+        // Valores Padrão da Tabela
+        const DEFAULT_VALS = {
+            c1_orig: "25.399.555,37",
+            c1_per:  "25.399.555,37",
+            c2_orig: "6.532.500,00",
+            c2_per:  "5.000.000,00",
+            c3_orig: "982.947,48",
+            c3_per:  "982.947,48",
+            c4_orig: "5.472.000,00",
+            c4_per:  "5.472.000,00",
+            c5_orig: "412.107,89",
+            c5_per:  "412.107,89"
+        };
+
+        // Controle de edição manual na coluna do Perito
+        let customEdited = {
+            c1_per: false,
+            c2_per: true,
+            c3_per: false,
+            c4_per: false,
+            c5_per: false
+        };
+
+        function parseVal(str) {
+            if (!str) return 0;
+            let clean = str.replace(/[R$\s.]/g, '').replace(',', '.');
+            let num = parseFloat(clean);
+            return isNaN(num) ? 0 : num;
+        }
+
+        function formatBRL(num) {
+            return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // Evento disparado quando o usuário edita a coluna da Prefeitura
+        function onPrefeituraInput(itemIndex) {
+            let origId = 'c' + itemIndex + '_orig';
+            let perId = 'c' + itemIndex + '_per';
+            
+            if (!customEdited[perId]) {
+                document.getElementById(perId).value = document.getElementById(origId).value;
+            }
+            
+            recalcularSimulacao();
+        }
+
+        // Evento disparado quando o usuário edita manualmente a coluna do Perito
+        function onPeritoInput(itemIndex) {
+            let perId = 'c' + itemIndex + '_per';
+            customEdited[perId] = true;
+            recalcularSimulacao();
+        }
+
+        function recalcularSimulacao() {
+            let c1_o = parseVal(document.getElementById('c1_orig').value);
+            let c2_o = parseVal(document.getElementById('c2_orig').value);
+            let c3_o = parseVal(document.getElementById('c3_orig').value);
+            let c4_o = parseVal(document.getElementById('c4_orig').value);
+            let c5_o = parseVal(document.getElementById('c5_orig').value);
+
+            let c1_p = parseVal(document.getElementById('c1_per').value);
+            let c2_p = parseVal(document.getElementById('c2_per').value);
+            let c3_p = parseVal(document.getElementById('c3_per').value);
+            let c4_p = parseVal(document.getElementById('c4_per').value);
+            let c5_p = parseVal(document.getElementById('c5_per').value);
+
+            let tot_o = c1_o + c2_o + c3_o + c4_o + c5_o;
+            let tot_p = c1_p + c2_p + c3_p + c4_p + c5_p;
+
+            let contra_o = tot_o * 0.01;
+            let contra_p = tot_p * 0.01;
+
+            let ganho = contra_o - contra_p;
+            if (ganho < 0) ganho = 0;
+
+            let honorarios = ganho * 0.10;
+            let liquida = ganho - honorarios;
+
+            document.getElementById('tot_orig').innerText = formatBRL(tot_o);
+            document.getElementById('tot_per').innerText = formatBRL(tot_p);
+            document.getElementById('contra_orig').innerText = formatBRL(contra_o);
+            document.getElementById('contra_per').innerText = formatBRL(contra_p);
+
+            // Exibição em verde no padrão original
+            document.getElementById('ganho_bruto').innerText = formatBRL(ganho) + " de Economia";
+            document.getElementById('honorarios_perito').innerText = formatBRL(honorarios);
+            document.getElementById('econ_valor').innerText = formatBRL(liquida);
+        }
+
+        function resetarSimulacao() {
+            for (let id in DEFAULT_VALS) {
+                document.getElementById(id).value = DEFAULT_VALS[id];
+            }
+            customEdited = {
+                c1_per: false,
+                c2_per: true,
+                c3_per: false,
+                c4_per: false,
+                c5_per: false
+            };
+            recalcularSimulacao();
+        }
+
+        // Carregamento inicial
+        window.onload = function() {
+            recalcularSimulacao();
+        };
+    </script>
+</body>
+</html>

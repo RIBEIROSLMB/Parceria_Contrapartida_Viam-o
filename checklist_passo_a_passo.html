@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Simplificado - Perito Avaliador Autônomo</title>
+    
+    <!-- Google Fonts & Lucide Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #0f172a;
+            --brand-blue: #2563eb;
+            --brand-light: #eff6ff;
+            --warning-bg: #fffbeb;
+            --warning-border: #f59e0b;
+            --warning-text: #92400e;
+            --success-bg: #ecfdf5;
+            --success-text: #065f46;
+            --border-color: #cbd5e1;
+            --dark-text: #1e293b;
+            --light-text: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark-text);
+            background-color: #f8fafc;
+            line-height: 1.6;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header p {
+            color: var(--light-text);
+            font-size: 1rem;
+            margin-top: 8px;
+        }
+
+        /* Compliance Warning Box */
+        .alert-compliance {
+            background-color: var(--warning-bg);
+            border-left: 5px solid var(--warning-border);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            color: var(--warning-text);
+        }
+
+        .alert-compliance h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .alert-compliance p, .alert-compliance ul {
+            font-size: 0.92rem;
+        }
+
+        .alert-compliance ul {
+            margin-left: 20px;
+            margin-top: 6px;
+        }
+
+        /* Phase Cards */
+        .phase-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .phase-badge {
+            background: var(--brand-light);
+            color: var(--brand-blue);
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Checklist Items */
+        .checklist-group {
+            display: flex;
+            flex-direction: flex-column;
+            gap: 12px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            transition: background 0.2s;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .check-item:hover {
+            background: #f1f5f9;
+        }
+
+        .check-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 3px;
+            cursor: pointer;
+            accent-color: var(--brand-blue);
+        }
+
+        .check-content strong {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--dark-text);
+        }
+
+        .check-content span {
+            font-size: 0.88rem;
+            color: var(--light-text);
+        }
+
+        .check-item.completed {
+            background: var(--success-bg);
+            border-color: #a7f3d0;
+        }
+
+        .check-item.completed .check-content strong {
+            text-decoration: line-through;
+            color: var(--success-text);
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            background: #1e293b;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                max-width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+            .phase-card {
+                box-shadow: none;
+                border: 1px solid #cbd5e1;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn no-print" onclick="window.print()">
+        <i data-lucide="printer"></i> Imprimir / Salvar PDF
+    </button>
+
+    <div class="container">
+        
+        <div class="header">
+            <h1><i data-lucide="check-circle" style="color: var(--brand-blue);"></i> Checklist Passo a Passo Simplificado</h1>
+            <p>Roteiro prático e direto para atuação como <strong>Perito Avaliador Autônomo (Pessoa Física com CPF)</strong> em Viamão/RS.</p>
+        </div>
+
+        <!-- Compliance Box Simplificado -->
+        <div class="alert-compliance">
+            <h3><i data-lucide="shield-check"></i> REGRA DE OURO PARA O SERVIDOR PÚBLICO (SEM ABRIR EMPRESA)</h3>
+            <p>Atuar como Perito Avaliador Autônomo (Pessoa Física) é perfeitamente legal e não exige abertura de CNPJ. O único cuidado ético e legal como funcionário público é:</p>
+            <ul>
+                <li><strong>Abstenção de Julgamento / Parecer Interno:</strong> Se algum processo do seu cliente tramitar no seu setor de trabalho na Prefeitura de Viamão, faça uma simples <i>Declaração Formal de Impedimento/Suspeição</i> e passe o processo para outro servidor do setor.</li>
+                <li><strong>Assinatura Técnica:</strong> Assine o Laudo NBR 14.653 e a peça administrativa como Perito Avaliador Habilitado / Engenheiro / Arquiteto / Corretor Perito (com seu registro do conselho de classe).</li>
+            </ul>
+        </div>
+
+        <!-- ETAPA 1 -->
+        <div class="phase-card">
+            <div class="phase-title">
+                <span>PASSO 1 – Prospecção & Primeiro Contato</span>
+                <span class="phase-badge">Captação</span>
+            </div>
+            <div class="checklist-group">
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>1.1. Identificar o Empreendimento em Viamão</strong>
+                        <span>Descobrir condomínio, loteamento ou prédio com processo de licenciamento no Escritório de Licenciamento/SGG com cálculo de contrapartida expedido.</span>
+                    </div>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>1.2. Fazer Análise Rápida do Valor Calculado</strong>
+                        <span>Verificar se a Prefeitura aplicou o valor venal genérico m² sem considerar descontos de gleba, APPs, solo ou topografia.</span>
+                    </div>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>1.3. Enviar o Portfólio Executivo (Pessoa Física)</strong>
+                        <span>Encaminhar o arquivo `portfolio_oportunidade_viamao.html` apresentando sua qualificação de Perito e a proposta de Risco Zero.</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- ETAPA 2 -->
+        <div class="phase-card">
+            <div class="phase-title">
+                <span>PASSO 2 – Assinatura do Contrato de Êxito (10%)</span>
+                <span class="phase-badge">Fechamento</span>
+            </div>
+            <div class="checklist-group">
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>2.1. Preencher e Assinar o Contrato Simplificado</strong>
+                        <span>Imprimir e assinar o arquivo `contrato_parceria_contrapartida.html` (Contrato de Perito Avaliador Autônomo com CPF).</span>
+                    </div>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>2.2. Pegar a Procuração Administrativa da Empresa</strong>
+                        <span>Solicitar à empresa procuração simples autorizando você como Perito/Procurador a atuar no processo administrativo junto à Prefeitura.</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- ETAPA 3 -->
+        <div class="phase-card">
+            <div class="phase-title">
+                <span>PASSO 3 – Laudo NBR 14.653 & Requerimento</span>
+                <span class="phase-badge">Laudo Técnico</span>
+            </div>
+            <div class="checklist-group">
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>3.1. Elaborar o Laudo de Avaliação Imobiliária</strong>
+                        <span>Coletar dados de mercado e confeccionar o Laudo Pericial de Avaliação da Gleba conforme a norma ABNT NBR 14.653 com seu registro profissional.</span>
+                    </div>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>3.2. Protocolar o Requerimento de Reavaliação</strong>
+                        <span>Protocolar o Requerimento Administrativo juntando o Laudo de Avaliação no sistema 1Doc / Protocolo Geral da Prefeitura de Viamão.</span>
+                    </div>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>3.3. Acompanhar a Tramitação na Prefeitura</strong>
+                        <span>Acompanhar a análise da Fazenda Municipal / Escritório de Licenciamento até a expedição do parecer de deferimento da redução.</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- ETAPA 4 -->
+        <div class="phase-card">
+            <div class="phase-title">
+                <span>PASSO 4 – Deferimento, Recibo & Recebimento (10%)</span>
+                <span class="phase-badge">Faturamento</span>
+            </div>
+            <div class="checklist-group">
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>4.1. Emitir o Demonstrativo da Economia Realizada</strong>
+                        <span>Apresentar para a empresa a Certidão da Prefeitura comprovando a redução obtida: `Economia = Valor Inicial - Valor Final Reduzido`.</span>
+                    </div>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>4.2. Fornecer Recibo de Autônomo (RPA / PIX)</strong>
+                        <span>Enviar a conta bancária/PIX e emitir o recibo de honorários de autônomo referentes aos 10% do valor economizado.</span>
+                    </div>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" onchange="toggleComplete(this)">
+                    <div class="check-content">
+                        <strong>4.3. Confirmar o Pagamento dos 10%</strong>
+                        <span>Confirmar o recebimento na sua conta e concluir a prestação de serviços com sucesso.</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleComplete(checkbox) {
+            const item = checkbox.closest('.check-item');
+            if (checkbox.checked) {
+                item.classList.add('completed');
+            } else {
+                item.classList.remove('completed');
+            }
+        }
+    </script>
+</body>
+</html>
