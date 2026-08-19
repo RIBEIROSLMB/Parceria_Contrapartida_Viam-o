@@ -38,7 +38,7 @@
             line-height: 1.6;
         }
 
-        /* Top Header Bar com WhatsApp Clicável */
+        /* Top Header Bar com WhatsApp Clicável em Fundo Verde */
         .top-header-bar {
             background: #0f172a;
             color: white;
@@ -67,28 +67,29 @@
         .header-wa-btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             background: var(--wa-green);
-            color: white;
-            padding: 7px 16px;
+            color: #ffffff;
+            padding: 8px 18px;
             border-radius: 25px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 0.88rem;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            font-size: 0.9rem;
+            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
             transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .header-wa-btn:hover {
             background: var(--wa-green-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(37, 211, 102, 0.5);
         }
 
-        .header-wa-btn img {
-            width: 22px;
-            height: 22px;
-            object-fit: contain;
+        .header-wa-btn svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
         }
 
         /* Site Tab Navigation Bar */
@@ -699,14 +700,17 @@
 </head>
 <body>
 
-    <!-- Top Header Bar com WhatsApp Clicável -->
+    <!-- Top Header Bar com Botão WhatsApp Clicável em Fundo Verde e Logotipo Limpo -->
     <header class="top-header-bar">
         <div class="header-brand">
             <i data-lucide="award" style="color: #2563eb;"></i>
             <span>Guilherme Augusto Ribeiro | Perito Avaliador (CREA 22157/DF)</span>
         </div>
         <a href="https://wa.link/v9ram8" target="_blank" class="header-wa-btn" title="Clique para abrir atendimento via WhatsApp">
-            <img src="whatsapp_logo.png" alt="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.477 2 2 6.477 2 12C2 13.891 2.525 15.661 3.438 17.178L2.25 21.75L6.963 20.597C8.428 21.493 10.155 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2Z" fill="#25D366"/>
+                <path d="M17.472 14.382C17.2 14.246 15.86 13.587 15.611 13.496C15.362 13.405 15.18 13.36 14.998 13.632C14.816 13.905 14.293 14.518 14.134 14.7C13.975 14.882 13.816 14.905 13.543 14.769C13.27 14.632 12.392 14.345 11.35 13.415C10.539 12.692 9.991 11.799 9.832 11.526C9.673 11.253 9.815 11.106 9.952 10.97C10.075 10.847 10.225 10.65 10.361 10.491C10.498 10.332 10.543 10.218 10.634 10.036C10.725 9.854 10.68 9.695 10.612 9.559C10.543 9.423 10.02 8.15 9.805 7.632C9.595 7.128 9.382 7.197 9.223 7.188C9.073 7.18 8.891 7.18 8.709 7.18C8.527 7.18 8.232 7.248 7.982 7.521C7.732 7.794 7.027 8.453 7.027 9.794C7.027 11.135 8.005 12.43 8.141 12.612C8.277 12.794 10.063 15.545 12.801 16.729C13.452 17.01 13.957 17.177 14.354 17.303C15.006 17.51 15.6 17.481 16.07 17.411C16.594 17.333 17.683 16.752 17.91 16.115C18.138 15.478 18.138 14.933 18.07 14.819C18.002 14.706 17.845 14.638 17.572 14.502H17.472Z" fill="white"/>
+            </svg>
             <span>Falar no WhatsApp: (61) 98103-6619</span>
         </a>
     </header>
@@ -1020,7 +1024,10 @@
                     </div>
                     <!-- Link WhatsApp Clicável -->
                     <a href="https://wa.link/v9ram8" target="_blank" class="contact-item" style="background: rgba(37,211,102,0.25); border-color: rgba(37,211,102,0.4);" title="Clique para abrir atendimento via WhatsApp">
-                        <img src="whatsapp_logo.png" alt="WhatsApp" style="width: 22px; height: 22px; vertical-align: middle;">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 22px; height: 22px; vertical-align: middle;">
+                            <path d="M12 2C6.477 2 2 6.477 2 12C2 13.891 2.525 15.661 3.438 17.178L2.25 21.75L6.963 20.597C8.428 21.493 10.155 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2Z" fill="#25D366"/>
+                            <path d="M17.472 14.382C17.2 14.246 15.86 13.587 15.611 13.496C15.362 13.405 15.18 13.36 14.998 13.632C14.816 13.905 14.293 14.518 14.134 14.7C13.975 14.882 13.816 14.905 13.543 14.769C13.27 14.632 12.392 14.345 11.35 13.415C10.539 12.692 9.991 11.799 9.832 11.526C9.673 11.253 9.815 11.106 9.952 10.97C10.075 10.847 10.225 10.65 10.361 10.491C10.498 10.332 10.543 10.218 10.634 10.036C10.725 9.854 10.68 9.695 10.612 9.559C10.543 9.423 10.02 8.15 9.805 7.632C9.595 7.128 9.382 7.197 9.223 7.188C9.073 7.18 8.891 7.18 8.709 7.18C8.527 7.18 8.232 7.248 7.982 7.521C7.732 7.794 7.027 8.453 7.027 9.794C7.027 11.135 8.005 12.43 8.141 12.612C8.277 12.794 10.063 15.545 12.801 16.729C13.452 17.01 13.957 17.177 14.354 17.303C15.006 17.51 15.6 17.481 16.07 17.411C16.594 17.333 17.683 16.752 17.91 16.115C18.138 15.478 18.138 14.933 18.07 14.819C18.002 14.706 17.845 14.638 17.572 14.502H17.472Z" fill="white"/>
+                        </svg>
                         <span><strong>WhatsApp:</strong> (61) 98103-6619</span>
                     </a>
                     <!-- Link Gmail Direct -->
